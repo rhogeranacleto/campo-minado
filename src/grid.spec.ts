@@ -78,7 +78,7 @@ describe('Grid tests', () => {
         .mockReturnValueOnce(0)
         .mockReturnValueOnce(8);
 
-      grid.generateBombs();
+      grid.generateBombs([]);
     });
 
     it('should generateBombs set properly tiles as bombs', () => {
@@ -104,7 +104,7 @@ describe('Grid tests', () => {
       [15, 0],
     ])('should tile %p not be a bomb and count %p as bomb boundaries', (index, count) => {
 
-      expect(grid.tiles[index].bombBounderiesCount).toEqual(count);
+      expect(grid.tiles[index].bombBoundariesCount).toEqual(count);
     });
   });
 });

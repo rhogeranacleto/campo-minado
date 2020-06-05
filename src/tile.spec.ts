@@ -26,7 +26,7 @@ describe('Tile tests', () => {
 
       expect(tile.isBomb).toBe(true);
 
-      expect(tile.boundaryTiles.map(boundaryTile => boundaryTile.bombBounderiesCount)).toEqual([1, 1, 1]);
+      expect(tile.boundaryTiles.map(boundaryTile => boundaryTile.bombBoundariesCount)).toEqual([1, 1, 1]);
     });
   });
 
@@ -97,22 +97,22 @@ describe('Tile tests', () => {
 
     it('should show when not flagged', () => {
 
-      tile.show();
+      tile.show(true);
 
       expect(tile.hidden).toBe(false);
     });
 
     it('should show all boundaries', () => {
 
-      tile.show();
+      tile.show(true);
 
       expect(tile.boundaryTiles.map(boundaryTile=>boundaryTile.hidden)).toEqual([false, false, false]);
     });
 
     it('should not show all boundaries', () => {
 
-      tile.bombBounderiesCount = 1;
-      tile.show();
+      tile.bombBoundariesCount = 1;
+      tile.show(true);
 
       expect(tile.boundaryTiles.map(boundaryTile=>boundaryTile.hidden)).toEqual([true, true, true]);
     });
@@ -121,7 +121,7 @@ describe('Tile tests', () => {
 
       tile.flagged = true;
 
-      tile.show();
+      tile.show(true);
 
       expect(tile.hidden).toBe(true);
     });

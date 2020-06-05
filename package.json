@@ -30,6 +30,8 @@
   },
   "dependencies": {
     "@types/random": "^2.1.1",
+    "file-loader": "^6.0.0",
+    "pixi.js": "^5.2.4",
     "random": "^2.2.0"
   }
 }
