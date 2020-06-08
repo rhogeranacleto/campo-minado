@@ -13,7 +13,7 @@
     "rootDir": "./",
     "baseUrl": ".",
     "paths": {
-      "*": ["types/*"]
+      "*": ["@types/global.d.ts"]
     },
     "strictPropertyInitialization": false
   },
