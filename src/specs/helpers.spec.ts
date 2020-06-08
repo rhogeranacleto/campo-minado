@@ -1,4 +1,4 @@
-import { getPosition, getPositionHorizontalSibings, getPositionVerticalSibings, getBoundariesPositions, filterInvalidPositions, getIndexByPosition } from "./helpers";
+import { getPosition, getPositionHorizontalSibings, getPositionVerticalSibings, getBoundariesPositions, filterInvalidPositions, getIndexByPosition } from "../helpers";
 
 describe('Helpers', () => {
 
