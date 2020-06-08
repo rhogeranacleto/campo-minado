@@ -1,9 +1,9 @@
-import { Application, Text, TextStyle, Container } from 'pixi.js';
+import { Application } from 'pixi.js';
 import { Grid } from './grid';
 import { info } from './info';
 
 const app = new Application({
-  backgroundColor: 0xCCCCCC
+  backgroundColor: 0xcccccc,
 });
 
 document.body.appendChild(app.view);
@@ -24,4 +24,5 @@ info({
   app,
 });
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 (window as any).grid = grid;

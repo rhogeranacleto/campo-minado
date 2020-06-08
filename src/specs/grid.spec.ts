@@ -1,12 +1,10 @@
-import { Grid } from "../grid";
 import * as random from 'random';
+import { Grid } from '../grid';
 
 jest.mock('random');
 
 describe('Grid tests', () => {
-
   describe('generateTiles', () => {
-
     let grid: Grid;
 
     beforeEach(() => {
@@ -16,12 +14,10 @@ describe('Grid tests', () => {
     });
 
     it('should create all grid tiles', () => {
-
       expect(grid.tiles.length).toEqual(9);
     });
 
     describe('getTileBoundaries', () => {
-
       it.each([
         [0, 3],
         [1, 5],
@@ -33,13 +29,11 @@ describe('Grid tests', () => {
         [7, 5],
         [8, 3],
       ])('should tile[%p] have %p boundaries count', (i, expected) => {
-
         expect(grid.tiles[i].boundaryTiles.length).toEqual(expected);
         expect(grid.tiles[i].boundaryTiles.length).toEqual(expected);
       });
 
       it('should tile 0 has correctly baundaries tile', () => {
-
         expect(grid.tiles[0].boundaryTiles[0]).toBe(grid.tiles[1]);
         expect(grid.tiles[0].boundaryTiles[1]).toBe(grid.tiles[3]);
         expect(grid.tiles[0].boundaryTiles[2]).toBe(grid.tiles[4]);
@@ -55,18 +49,20 @@ describe('Grid tests', () => {
         [6, [3, 4, 7]],
         [7, [3, 4, 5, 6, 8]],
         [8, [4, 5, 7]],
-      ])('should tile at index %p have baundaries at indexes %p', (tileIndex, indexes) => {
-
-        for (const index of indexes) {
-
-          expect(grid.tiles[tileIndex].boundaryTiles).toContain(grid.tiles[index]);
-        }
-      });
+      ])(
+        'should tile at index %p have baundaries at indexes %p',
+        (tileIndex, indexes) => {
+          for (const index of indexes) {
+            expect(grid.tiles[tileIndex].boundaryTiles).toContain(
+              grid.tiles[index],
+            );
+          }
+        },
+      );
     });
   });
 
   describe('generateBombs', () => {
-
     let grid: Grid;
 
     beforeEach(() => {
@@ -74,15 +70,12 @@ describe('Grid tests', () => {
 
       grid.generateTiles();
 
-      (random.int as jest.Mock)
-        .mockReturnValueOnce(0)
-        .mockReturnValueOnce(8);
+      (random.int as jest.Mock).mockReturnValueOnce(0).mockReturnValueOnce(8);
 
       grid.generateBombs([]);
     });
 
     it('should generateBombs set properly tiles as bombs', () => {
-
       expect(grid.tiles[0].isBomb).toBe(true);
       expect(grid.tiles[9].isBomb).toBe(true);
     });
@@ -102,9 +95,11 @@ describe('Grid tests', () => {
       [13, 1],
       [14, 1],
       [15, 0],
-    ])('should tile %p not be a bomb and count %p as bomb boundaries', (index, count) => {
-
-      expect(grid.tiles[index].bombBoundariesCount).toEqual(count);
-    });
+    ])(
+      'should tile %p not be a bomb and count %p as bomb boundaries',
+      (index, count) => {
+        expect(grid.tiles[index].bombBoundariesCount).toEqual(count);
+      },
+    );
   });
 });

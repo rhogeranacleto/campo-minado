@@ -1,37 +1,36 @@
-import { Tile } from "./tile";
-import { getPosition, getBoundariesPositions, filterInvalidPositions, getIndexByPosition } from "./helpers";
 import * as random from 'random';
-import { Container } from "pixi.js";
+import {
+  filterInvalidPositions,
+  getBoundariesPositions,
+  getIndexByPosition,
+  getPosition,
+} from './helpers';
+import { Container } from 'pixi.js';
+import { Tile } from './tile';
 
 export enum GameState {
   unitilized,
   progress,
   win,
-  loose
-};
+  loose,
+}
 
 export class Grid {
-
   public tiles: Tile[];
   public bombsCount: number;
   public bombsGenerated: boolean;
   public container: Container;
   public state: GameState;
 
-  constructor(
-    public width: number,
-    public height: number) {
-
+  constructor(public width: number, public height: number) {
     this.state = GameState.unitilized;
-    this.bombsCount = Math.floor(this.width * this.height * 0.20);
+    this.bombsCount = Math.floor(this.width * this.height * 0.2);
     this.container = new Container();
   }
 
   public generateTiles() {
-
     this.tiles = new Array(this.width * this.height).fill(null).map((_, i) => {
-
-      const [x, y] = getPosition(i, this.width)
+      const [x, y] = getPosition(i, this.width);
 
       const tile = new Tile(x, y);
 
@@ -41,7 +40,6 @@ export class Grid {
     });
 
     for (const tile of this.tiles) {
-
       tile.boundaryTiles = this.getTileBoundaries(tile);
     }
 
@@ -49,38 +47,31 @@ export class Grid {
   }
 
   public delegateClicks() {
-
-    this.tiles.forEach(tile => {
-
-      tile.block.on('click', (e: any) => {
-
+    this.tiles.forEach((tile) => {
+      tile.block.on('click', () => {
         this.clickOnTile(tile);
       });
 
-      tile.block.on('rightclick', (e: any) => {
-
+      tile.block.on('rightclick', () => {
         tile.toggleFlag(!tile.flagged);
       });
     });
   }
 
   public clickOnTile(tile: Tile) {
-
     if (!this.bombsGenerated) {
-
       this.state = GameState.progress;
       this.bombsGenerated = true;
       this.generateBombs(tile.boundaryTiles.concat(tile));
     }
 
     if (!tile.flagged && tile.isBomb) {
-
-      this.tiles.filter(tile => tile.isBomb).forEach(tile => tile.show(false));
+      this.tiles
+        .filter((tile) => tile.isBomb)
+        .forEach((tile) => tile.show(false));
     } else if (!tile.hidden) {
-
       tile.revealRemainingSiblings();
     } else {
-
       tile.show(true);
     }
 
@@ -88,36 +79,42 @@ export class Grid {
   }
 
   public checkWin() {
-
-    const nonBombsHidden = this.tiles.filter(tile => !tile.isBomb && tile.hidden).length;
-    const hasBombsRevealed = this.tiles.some(tile => tile.isBomb && !tile.hidden);
+    const nonBombsHidden = this.tiles.filter(
+      (tile) => !tile.isBomb && tile.hidden,
+    ).length;
+    const hasBombsRevealed = this.tiles.some(
+      (tile) => tile.isBomb && !tile.hidden,
+    );
 
     if (hasBombsRevealed) {
-
       this.state = GameState.loose;
     }
 
     if (nonBombsHidden === 0) {
-
       this.state = GameState.win;
     }
   }
 
   public getTileBoundaries(tile: Tile) {
-
     let boundariesPositions = getBoundariesPositions(tile.x, tile.y);
-    boundariesPositions = filterInvalidPositions(boundariesPositions, this.width, this.height);
+    boundariesPositions = filterInvalidPositions(
+      boundariesPositions,
+      this.width,
+      this.height,
+    );
 
-    const boundariesIndex = boundariesPositions.map(([x, y]) => getIndexByPosition(x, y, this.width));
+    const boundariesIndex = boundariesPositions.map(([x, y]) =>
+      getIndexByPosition(x, y, this.width),
+    );
 
     return this.tiles.filter((_, i) => boundariesIndex.includes(i));
   }
 
   public generateBombs(exceptTiles: Tile[]) {
-
     for (let i = 0; i < this.bombsCount; i++) {
-
-      const freeTiles = this.tiles.filter(tile => !tile.isBomb && !exceptTiles.includes(tile));
+      const freeTiles = this.tiles.filter(
+        (tile) => !tile.isBomb && !exceptTiles.includes(tile),
+      );
       const tileIndex = random.int(0, freeTiles.length - 1);
 
       freeTiles[tileIndex].setAsBomb();
@@ -125,9 +122,8 @@ export class Grid {
   }
 
   public reset() {
-
     this.state = GameState.unitilized;
-    this.tiles.forEach(tile => tile.reset());
+    this.tiles.forEach((tile) => tile.reset());
     this.bombsGenerated = false;
   }
 }
