@@ -41,3 +41,24 @@ export const filterInvalidPositions = (
     return x >= 0 && y >= 0 && x < width && y < height;
   });
 };
+
+export const getTextColor = (bombBoundariesCount: number) => {
+  switch (bombBoundariesCount) {
+    case 0:
+      return '#ccc';
+    case 1:
+      return '#428cc1';
+    case 2:
+      return '#42c187';
+    case 3:
+      return '#d8c623';
+    case 4:
+      return '#e86a2c';
+    case 5:
+      return '#d63838';
+    case 6:
+      return '#7f0eb7';
+    default:
+      return '#ff03bc';
+  }
+};

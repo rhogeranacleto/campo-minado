@@ -60,8 +60,6 @@ export class Grid {
 
   public clickOnTile(tile: Tile) {
     if (!this.bombsGenerated) {
-      this.state = GameState.progress;
-      this.bombsGenerated = true;
       this.generateBombs(tile.boundaryTiles.concat(tile));
     }
 
@@ -111,6 +109,9 @@ export class Grid {
   }
 
   public generateBombs(exceptTiles: Tile[]) {
+    this.state = GameState.progress;
+    this.bombsGenerated = true;
+
     for (let i = 0; i < this.bombsCount; i++) {
       const freeTiles = this.tiles.filter(
         (tile) => !tile.isBomb && !exceptTiles.includes(tile),

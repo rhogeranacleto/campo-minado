@@ -5,6 +5,7 @@ import {
   getPosition,
   getPositionHorizontalSibings,
   getPositionVerticalSibings,
+  getTextColor,
 } from '../helpers';
 
 describe('Helpers', () => {
@@ -131,9 +132,22 @@ describe('Helpers', () => {
     [1, 1, 2, 3],
     [3, 3, 4, 15],
   ])(
-    'shoudl getIndexByPosition(%p, %p, %p) return %p',
+    'should getIndexByPosition(%p, %p, %p) return %p',
     (x, y, width, expected) => {
       expect(getIndexByPosition(x, y, width)).toEqual(expected);
     },
   );
+
+  it.each([
+    [0, '#ccc'],
+    [1, '#428cc1'],
+    [2, '#42c187'],
+    [3, '#d8c623'],
+    [4, '#e86a2c'],
+    [5, '#d63838'],
+    [6, '#7f0eb7'],
+    [7, '#ff03bc'],
+  ])('should getTextColor(%p) return %p', (count, color) => {
+    expect(getTextColor(count)).toEqual(color);
+  });
 });

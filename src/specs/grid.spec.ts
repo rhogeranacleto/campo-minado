@@ -62,11 +62,13 @@ describe('Grid tests', () => {
     });
   });
 
-  describe('generateBombs', () => {
+  describe.only('generateBombs', () => {
     let grid: Grid;
 
     beforeEach(() => {
       grid = new Grid(4, 4);
+
+      grid.bombsCount = 2;
 
       grid.generateTiles();
 
@@ -75,30 +77,36 @@ describe('Grid tests', () => {
       grid.generateBombs([]);
     });
 
+    it('should call random with proper params', () => {
+      expect(random.int).toBeCalledTimes(2);
+      expect(random.int).nthCalledWith(1, 0, 15);
+      expect(random.int).nthCalledWith(2, 0, 14);
+    });
+
     it('should generateBombs set properly tiles as bombs', () => {
       expect(grid.tiles[0].isBomb).toBe(true);
       expect(grid.tiles[9].isBomb).toBe(true);
     });
 
     it.each([
-      [1, 1],
-      [2, 0],
-      [3, 0],
-      [4, 2],
-      [5, 2],
-      [6, 1],
-      [7, 0],
-      [8, 1],
-      [10, 1],
-      [11, 0],
-      [12, 1],
-      [13, 1],
-      [14, 1],
-      [15, 0],
+      [1, '1'],
+      [2, '0'],
+      [3, '0'],
+      [4, '2'],
+      [5, '2'],
+      [6, '1'],
+      [7, '0'],
+      [8, '1'],
+      [10, '1'],
+      [11, '0'],
+      [12, '1'],
+      [13, '1'],
+      [14, '1'],
+      [15, '0'],
     ])(
       'should tile %p not be a bomb and count %p as bomb boundaries',
       (index, count) => {
-        expect(grid.tiles[index].bombBoundariesCount).toEqual(count);
+        expect(grid.tiles[index].blockText.text).toEqual(count);
       },
     );
   });
