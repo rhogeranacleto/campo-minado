@@ -25,6 +25,18 @@ export class Tile {
     return this.boundaryTiles.filter((tile) => tile.isBomb).length;
   }
 
+  private get canShow() {
+    return this.hidden && !this.flagged;
+  }
+
+  private get flagAroundCount() {
+    return this.boundaryTiles.filter((tile) => tile.flagged).length;
+  }
+
+  private get canReviewSiblings() {
+    return this.flagAroundCount === this.bombBoundariesCount;
+  }
+
   public setAsBomb() {
     this.isBomb = true;
     this.blockText.text = '';
@@ -40,7 +52,7 @@ export class Tile {
   }
 
   public show(showSiblings: boolean) {
-    if (this.hidden && !this.flagged) {
+    if (this.canShow) {
       this.hidden = false;
       this.blockText.visible = true;
       this.bomb.visible = this.isBomb;
@@ -52,10 +64,7 @@ export class Tile {
   }
 
   public revealRemainingSiblings() {
-    const flagAroundCount = this.boundaryTiles.filter((tile) => tile.flagged)
-      .length;
-
-    if (flagAroundCount === this.bombBoundariesCount) {
+    if (this.canReviewSiblings) {
       this.showSiblings();
     }
   }
@@ -92,6 +101,18 @@ export class Tile {
     this.block.drawRect(0, 0, this.size, this.size);
     this.block.endFill();
     this.block.interactive = true;
+    this.block.on('pointerover', () => this.paintBlockOnHover());
+    this.block.on('pointerout', () => (this.block.tint = 0xffffff));
+  }
+
+  private paintBlockOnHover() {
+    const nonFlaggedHidden = this.boundaryTiles.filter(
+      (tile) => !tile.flagged && tile.hidden,
+    ).length;
+
+    if (this.canShow || (this.canReviewSiblings && nonFlaggedHidden > 0)) {
+      this.block.tint = 0xdddddd;
+    }
   }
 
   private drawBlockText() {
