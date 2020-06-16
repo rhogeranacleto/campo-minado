@@ -14,6 +14,7 @@ export function info({
   infoContainer.x = grid.container.width;
 
   const button = new Text('RESETAR');
+  button.buttonMode = true;
   button.on('click', reset);
   button.interactive = true;
   infoContainer.addChild(button);
@@ -21,10 +22,6 @@ export function info({
   const flagCount = new Text('');
   flagCount.y = button.height;
   infoContainer.addChild(flagCount);
-
-  // const finalizeGame = new Text('');
-  // finalizeGame.y = flagCount.height;
-  // infoContainer.addChild(finalizeGame);
 
   app.ticker.add(() => {
     switch (grid.state) {

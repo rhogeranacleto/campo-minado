@@ -1,12 +1,13 @@
+import './style.css';
 import { Application } from 'pixi.js';
 import { Grid } from './grid';
 import { info } from './info';
 
 const app = new Application({
-  backgroundColor: 0xcccccc,
+  transparent: true,
 });
 
-document.body.appendChild(app.view);
+document.getElementById('content')?.appendChild(app.view);
 
 app.view.addEventListener('contextmenu', (e) => {
   e.preventDefault();

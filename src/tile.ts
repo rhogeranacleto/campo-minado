@@ -95,14 +95,16 @@ export class Tile {
   }
 
   private drawBlock() {
+    const blockColor = 0xf9f9f9;
+
     this.block = new Graphics();
-    this.block.beginFill(0xffffff);
+    this.block.beginFill(blockColor);
     this.block.lineStyle(1, 0xbdbdbd);
     this.block.drawRect(0, 0, this.size, this.size);
     this.block.endFill();
     this.block.interactive = true;
     this.block.on('pointerover', () => this.paintBlockOnHover());
-    this.block.on('pointerout', () => (this.block.tint = 0xffffff));
+    this.block.on('pointerout', () => (this.block.tint = blockColor));
   }
 
   private paintBlockOnHover() {
@@ -110,7 +112,10 @@ export class Tile {
       (tile) => !tile.flagged && tile.hidden,
     ).length;
 
-    if (this.canShow || (this.canReviewSiblings && nonFlaggedHidden > 0)) {
+    if (
+      this.canShow ||
+      (!this.flagged && this.canReviewSiblings && nonFlaggedHidden > 0)
+    ) {
       this.block.tint = 0xdddddd;
     }
   }
